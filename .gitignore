@@ -38,7 +38,7 @@ Thumbs.db
 backend/target/
 
 # Si usás SQLite local
-backend/dev_db.db
+backend/*.db
 backend/*.db-shm
 backend/*.db-wal
 
