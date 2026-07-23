@@ -190,12 +190,15 @@ async fn main() {
         .allow_headers(Any);
 
     let app = Router::new()
+        //Balance
         .route("/balance", get(get_balance).post(post_balance))
-        .route("/spending/{id}", get(get_spending))//.put(update_spending).delete(delete_spending))
+        .route("/spending/{id}", get(get_spending).delete(delete_spending))
+        //Inventory
         .route("/inventory", get(get_inventory).post(post_inventory))
         .route("/inventory/{id}", put(update_inventory))
         .route("/inventory/sold", get(get_sold))
         .route("/inventory/dif", get(get_difference))
+        //Orders
         .route("/pedidos/{id}/complete", put(complete_order))
         .route("/pedidos", get(get_pedidos).post(post_pedido))
         .route("/pedidos/{id}",
@@ -597,4 +600,21 @@ async fn get_spending(
     .unwrap();
 
     Json(balance)
+}
+async fn delete_spending(
+    State(state): State<AppState>,
+    Path(id): Path<i64>,
+) -> StatusCode {
+    let result = sqlx::query(
+        "DELETE FROM Balance WHERE id = ?"
+    )
+    .bind(id)
+    .execute(&state.db)
+    .await;
+
+
+    match result {
+        Ok(_) => StatusCode::NO_CONTENT,
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    }
 }

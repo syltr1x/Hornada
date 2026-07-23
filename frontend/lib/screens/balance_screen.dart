@@ -48,7 +48,7 @@ class BalanceScreenState extends State<BalanceScreen> {
   }
   Future<void> deleteOrder(int id) async {
     final response = await http.delete(
-      Uri.parse("http://192.168.0.6:3000/balance/$id"),
+      Uri.parse("http://192.168.0.6:3000/spending/$id"),
     );
 
     if (response.statusCode == 204) {

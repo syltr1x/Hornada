@@ -9,6 +9,9 @@ import 'new_order_screen.dart';
 import 'new_product_screen.dart';
 import 'new_spending_screen.dart';
 
+import 'package:frontend/services/order_service.dart';
+import 'package:frontend/services/balance_service.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,17 +22,48 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<OrdersScreenState> _ordersKey = GlobalKey<OrdersScreenState>();
+  final GlobalKey<CompletedScreenState> _completedKey = GlobalKey<CompletedScreenState>();
   final GlobalKey<InventoryScreenState> _inventoryKey = GlobalKey<InventoryScreenState>();
   final GlobalKey<BalanceScreenState> _balanceKey = GlobalKey<BalanceScreenState>();
   int _selectedIndex = 0;
 
+  Future<bool> confirmarEnviarBalance(BuildContext context) async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Enviar pedidos al balance"),
+          content: const Text(
+            "Todos los pedidos pagados se enviarán al balance "
+            "y serán eliminados de la lista de pedidos.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
+
+    return confirmar ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       OrdersScreen(key: _ordersKey),
       InventoryScreen(key: _inventoryKey),
-      CompletedScreen(),
+      CompletedScreen(key: _completedKey),
       BalanceScreen(key: _balanceKey),
     ];
     return Scaffold(
@@ -66,21 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add),
       )
-       : _selectedIndex == 2
+      : _selectedIndex == 2
       ? FloatingActionButton(
-        onPressed: () async {
-          final created = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const SpendingNewScreen(),
-            ),
-          );
-
-          if (created == true) {
-            _balanceKey.currentState?.refreshBalance();
-          }
-        },
-        child: const Icon(Icons.point_of_sale),
+          onPressed: () async {
+            final confirmar =
+                await confirmarEnviarBalance(context);
+            if (!confirmar) return;
+            final orders =
+              await OrderService.getOrders();
+              await BalanceService.sendPaidOrdersToBalance(orders);
+              _completedKey.currentState?.refreshOrders();
+              _balanceKey.currentState?.refreshBalance();
+          },
+          child: const Icon(Icons.point_of_sale),
       )
       : _selectedIndex == 3
       ? FloatingActionButton(

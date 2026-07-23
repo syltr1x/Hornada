@@ -13,7 +13,6 @@ class OrderCard extends StatelessWidget {
   final List<String> methods = const [
   "Efectivo",
   "Transferencia",
-  "Mercado Pago",
 ];
   
 

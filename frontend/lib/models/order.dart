@@ -42,3 +42,32 @@ class Inventory {
     );
   }
 }
+
+class Paid {
+  final int id;
+  final String name;
+  final int total;
+  final String method;
+  final bool completed;
+  final bool paid;
+
+  Paid({
+    required this.id,
+    required this.name,
+    required this.total,
+    required this.method,
+    required this.completed,
+    required this.paid,
+  });
+
+  factory Paid.fromJson(Map<String, dynamic> json) {
+    return Paid(
+      id: json["id"],
+      name: json["name"],
+      total: json["total"],
+      method: json["method"],
+      completed: json["completed"],
+      paid: json["paid"],
+    );
+  }
+}
