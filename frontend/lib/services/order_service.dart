@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class OrderService {
-  static const String baseUrl = "http://192.168.0.6:3000";
+  static const String baseUrl = "https://api.lahornada.org";
 
 
   static Future<List<Paid>> getOrders() async {

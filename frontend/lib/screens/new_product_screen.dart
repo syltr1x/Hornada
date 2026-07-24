@@ -32,7 +32,7 @@ class _ProductNewScreenState extends State<ProductNewScreen> {
     });
 
     final response = await http.post(
-      Uri.parse("http://192.168.0.6:3000/inventory"),
+      Uri.parse("https://api.lahornada.org/inventory"),
       headers: {
         "Content-Type": "application/json",
       },

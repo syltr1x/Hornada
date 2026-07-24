@@ -33,7 +33,7 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
   Future<void> editProduct(int id, int cantidad) async {
     final response = await http.put(
-      Uri.parse("http://192.168.0.6:3000/inventory/$id"),
+      Uri.parse("https://api.lahornada.org/inventory/$id"),
       headers: {
         "Content-Type": "application/json",
       },
@@ -51,7 +51,7 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
   Future<List<Inventory>> getProducts() async {
     final response = await http.get(
-      Uri.parse("http://192.168.0.6:3000/inventory"),
+      Uri.parse("https://api.lahornada.org/inventory"),
     );
 
     if (response.statusCode == 200) {
@@ -66,7 +66,7 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
   Future<List<Inventory>> getDifference() async {
     final response = await http.get(
-      Uri.parse("http://192.168.0.6:3000/inventory/dif"),
+      Uri.parse("https://api.lahornada.org/inventory/dif"),
     );
 
     if (response.statusCode == 200) {

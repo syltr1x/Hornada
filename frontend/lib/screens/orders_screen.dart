@@ -30,7 +30,7 @@ class OrdersScreenState extends State<OrdersScreen> {
   }
   Future<void> deleteOrder(int id) async {
     final response = await http.delete(
-      Uri.parse("http://192.168.0.6:3000/pedidos/$id"),
+      Uri.parse("https://api.lahornada.org/pedidos/$id"),
     );
 
     if (response.statusCode == 204) {
@@ -41,7 +41,7 @@ class OrdersScreenState extends State<OrdersScreen> {
   }
   Future<void> completeOrder(int id) async {
     final response = await http.put(
-      Uri.parse("http://192.168.0.6:3000/pedidos/$id/complete"),
+      Uri.parse("https://api.lahornada.org/pedidos/$id/complete"),
     );
 
     if (response.statusCode == 204) {
@@ -75,7 +75,7 @@ class OrdersScreenState extends State<OrdersScreen> {
   }
   Future<List<Order>> getOrders() async {
     final response = await http.get(
-      Uri.parse("http://192.168.0.6:3000/pedidos"),
+      Uri.parse("https://api.lahornada.org/pedidos"),
     );
 
     if (response.statusCode == 200) {

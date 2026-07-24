@@ -77,7 +77,7 @@ class SpendingNewScreenState extends State<SpendingNewScreen> {
     });
 
     final response = await http.post(
-      Uri.parse("http://192.168.0.6:3000/balance"),
+      Uri.parse("https://api.lahornada.org/balance"),
       headers: {
         "Content-Type": "application/json",
       },

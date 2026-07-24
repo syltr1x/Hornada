@@ -93,7 +93,7 @@ class _OrderNewScreenState extends State<OrderNewScreen> {
     });
 
     final response = await http.post(
-      Uri.parse("http://192.168.0.6:3000/pedidos"),
+      Uri.parse("https://api.lahornada.org/pedidos"),
       headers: {
         "Content-Type": "application/json",
       },

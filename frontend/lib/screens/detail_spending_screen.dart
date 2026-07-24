@@ -32,7 +32,7 @@ class _OrderDetailScreenState
   Future<Spending> getOrder() async {
     final response = await http.get(
       Uri.parse(
-        "http://192.168.0.6:3000/spending/${widget.orderId}",
+        "https://api.lahornada.org/spending/${widget.orderId}",
       ),
     );
 

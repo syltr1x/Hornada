@@ -48,7 +48,7 @@ class BalanceScreenState extends State<BalanceScreen> {
   }
   Future<void> deleteOrder(int id) async {
     final response = await http.delete(
-      Uri.parse("http://192.168.0.6:3000/spending/$id"),
+      Uri.parse("https://api.lahornada.org/spending/$id"),
     );
 
     if (response.statusCode == 204) {
@@ -59,7 +59,7 @@ class BalanceScreenState extends State<BalanceScreen> {
   }
   Future<void> completeOrder(int id) async {
     final response = await http.put(
-      Uri.parse("http://192.168.0.6:3000/pedidos/$id/complete"),
+      Uri.parse("https://api.lahornada.org/pedidos/$id/complete"),
     );
 
     if (response.statusCode == 204) {
@@ -93,7 +93,7 @@ class BalanceScreenState extends State<BalanceScreen> {
 }
   Future<List<Balance>> getOrders() async {
     final response = await http.get(
-      Uri.parse("http://192.168.0.6:3000/balance"),
+      Uri.parse("https://api.lahornada.org/balance"),
     );
 
     if (response.statusCode == 200) {
