@@ -120,18 +120,20 @@ class CompletedScreenState extends State<CompletedScreen> {
               }
 
               final orders = snapshot.data!;
+              final unpaidOrders = orders.where((o) => !o.paid).toList();
 
               return ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: orders.length,
+                itemCount: unpaidOrders.length,
                 itemBuilder: (context, index) {
-               if(!orders[index].paid) { return OrderCard(
-                  order: orders[index],
-                  showPay: !orders[index].paid,
-                  onDelete: ()async {await deleteOrder(orders[index].id);},
-                  onPay: payOrder,
-                  onReady: () async {},
-                );} else {return null;}
+                  return OrderCard(
+                    order: unpaidOrders[index],
+                    showPay: true,
+                    onDelete: () async {
+                      await deleteOrder(unpaidOrders[index].id);
+                    },
+                    onPay: payOrder,
+                    onReady: () async {},
+                  );
                 },
               );
             },
