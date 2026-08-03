@@ -133,6 +133,11 @@ Widget build(BuildContext context) {
     "Sueldos": 0.0,
   };
 
+  final totalReal = orders.fold<int>(
+    0,
+    (sum, item) => sum + item.total,
+  );
+
   for (final spending in orders) {
     totals[spending.type] =
         (totals[spending.type] ?? 0) +
@@ -167,41 +172,66 @@ Widget build(BuildContext context) {
               fontWeight: FontWeight.bold,
             ),
           ),
-
           SizedBox(
             height: 250,
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                touchCallback: (event, response) {
-                  if (response?.touchedSection == null) return;
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                PieChart(
+                  PieChartData(
+                    pieTouchData: PieTouchData(
+                    touchCallback: (event, response) {
+                      if (response?.touchedSection == null) return;
 
-                  final tipo = entries[response!.touchedSection!.touchedSectionIndex].key;
+                      final tipo = entries[response!.touchedSection!.touchedSectionIndex].key;
 
-                  setState(() {
-                    if (selectedType == tipo) {
-                      selectedType = null; // segundo toque: deselecciona
-                    } else {
-                      selectedType = tipo; // primer toque: selecciona
-                    }
-                  });
-                },
-              ),
-                sections: entries.map((e) {
-                  return PieChartSectionData(
-                    value: e.value,
-                    title: "${e.key}\n${(e.value / totalGeneral * 100).toStringAsFixed(1)}%",
-                    color: colors[e.key],
-                    radius: selectedType == e.key ? 80 : 70,
-                  );
-                }).toList(),
-              )
+                      setState(() {
+                        if (selectedType == tipo) {
+                          selectedType = null; // segundo toque: deselecciona
+                        } else {
+                          selectedType = tipo; // primer toque: selecciona
+                        }
+                      });
+                    },
+                  ),
+                    sections: entries.map((e) {
+                      return PieChartSectionData(
+                        value: e.value,
+                        title: "${e.key}\n${(e.value / totalGeneral * 100).toStringAsFixed(1)}%",
+                        color: colors[e.key],
+                        radius: selectedType == e.key ? 80 : 70,
+                      );
+                    }).toList(),
+                  )
+                ),
+
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      selectedType == null
+                          ? "\$${totalReal.toInt()}"
+                          : "\$${totals[selectedType]!.toInt()}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      selectedType ?? "Total",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
               itemCount: visibleOrders.length,
               itemBuilder: (context, index) {
                 final order = visibleOrders[index];
